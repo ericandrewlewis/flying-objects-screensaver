@@ -30,7 +30,12 @@
 var Screensaver = function(dataURI) {
 	// Create an image element to access the image's width and height.
 	var img = this.img = new Image;
-	img.src = dataURI;
+	this.dataURI = dataURI;
+	img.addEventListener( 'load', this.imageLoaded.bind( this ) );
+	img.src = this.dataURI;
+}
+
+Screensaver.prototype.imageLoaded = function() {
 	this.animating = true;
 	// Add an <svg> element on the page.
 	var svg = this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -40,22 +45,22 @@ var Screensaver = function(dataURI) {
 
 	// If the image is too big, make the dimensions smaller.
 
-	if ( img.height > window.innerHeight / 2.25 ) {
-		var ratio = ( window.innerHeight / 2.25 ) / img.height;
-		img.height *= ratio;
-		img.width *= ratio;
+	if ( this.img.height > window.innerHeight / 2.25 ) {
+		var ratio = ( window.innerHeight / 2.25 ) / this.img.height;
+		this.img.height *= ratio;
+		this.img.width *= ratio;
 	}
-	if ( img.width > window.innerWidth / 3 ) {
-		var ratio = ( window.innerWidth / 3 ) / img.width;
-		img.height *= ratio;
-		img.width *= ratio;
+	if ( this.img.width > window.innerWidth / 3 ) {
+		var ratio = ( window.innerWidth / 3 ) / this.img.width;
+		this.img.height *= ratio;
+		this.img.width *= ratio;
 	}
 	var imageEl = this.imageEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 	imageEl.setAttribute( 'x', '0' );
 	imageEl.setAttribute( 'y', '0' );
-	imageEl.setAttribute( 'height', img.height );
-	imageEl.setAttribute( 'width', img.width );
-	imageEl.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', dataURI );
+	imageEl.setAttribute( 'height', this.img.height );
+	imageEl.setAttribute( 'width', this.img.width );
+	imageEl.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', this.dataURI );
 	svg.appendChild(imageEl);
 	this.imageVelocity = {
 		x: 2,
