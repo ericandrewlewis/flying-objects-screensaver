@@ -101,8 +101,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
 		var reader = new FileReader();
 		reader.onloadend = function () {
 			document.body.removeChild( document.querySelector('.input-wrapper') );
+			document.body.style.cursor = 'none';
 			defaultScreensaver.destroy();
 			new Screensaver(reader.result);
+
 		}
 		reader.readAsDataURL(file);
 	});
